@@ -4,9 +4,6 @@
       "source": "/",
       "destination": "/kontolu.html"
     }
-    {
-      "source": "/index.html",
-      "destination": "/kontolu.html"
     }
   ]
 }
