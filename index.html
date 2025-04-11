@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WhatsApp link generator website with animations, device detection, and user-friendly interface.">
+  <meta name="keywords" content="WhatsApp link generator, coding, website, AI, animation, device info">
+  <meta name="author" content="hansalrl">
+  <meta property="og:title" content="WhatsApp Link Generator">
+  <meta property="og:description" content="Generate WhatsApp links with ease!">
+  <meta property="og:image" content="https://example.com/thumbnail.jpg">
+  <meta property="og:url" content="https://wa-link-generator.vercel.app">
+  <title>WhatsApp Link Generator</title>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: url('https://img12.pixhost.to/images/1595/586824010_imgtmp.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* Input and Button Styling */
+    input, button, textarea {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 2px solid #ff4b2b;
+      font-size: 1.1em;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    button {
+      background: linear-gradient(270deg, #ff416c, #ff4b2b);
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: linear-gradient(270deg, #ff416c, #ff4b2b);
+      transform: scale(1.05);
+      transition: all 0.3s ease-in-out;
+    }
+
+    input:focus, textarea:focus {
+      outline: 2px solid #ff4b2b;
+      transition: outline 0.3s ease;
+    }
+
+    /* Animations */
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .container, .info-box {
+      animation: fadeSlideIn 1s ease-out forwards;
+    }
+
+    /* Responsive Styling */
+    .info-box {
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid transparent;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 15px;
+      animation: fadeSlideIn 1s ease-in-out;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 10px rgba(255, 0, 150, 0.3);
+      color: white;
+      text-align: left;
+      max-width: 100%;
+    }
+
+    @keyframes rgbBorder {
+      0% { border-image: linear-gradient(45deg, red, blue, green, purple) 1; }
+      25% { border-image: linear-gradient(45deg, blue, green, purple, red) 1; }
+      50% { border-image: linear-gradient(45deg, green, purple, red, blue) 1; }
+      75% { border-image: linear-gradient(45deg, purple, red, blue, green) 1; }
+      100% { border-image: linear-gradient(45deg, red, blue, green, purple) 1; }
+    }
+
+    .container {
+      animation: rgbBorder 6s linear infinite;
+    }
+
+    /* Typing animation for greeting */
+    .typing {
+      overflow: hidden;
+      border-right: 2px solid white;
+      white-space: nowrap;
+      animation: typing 4s steps(30, end), blink 0.7s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    /* Modal Popup */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .popup-button {
+      background-color: #ff4b2b;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .popup-button:hover {
+      background-color: #ff416c;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2em;
+      }
+
+      .container input,
+      .container button,
+      .container textarea {
+        max-width: 100%;
+        font-size: 1em;
+      }
+
+      .info-box {
+        padding: 10px;
+        font-size: 0.9em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5em;
+      }
+
+      .container input,
+      .container button,
+      .container textarea {
+        font-size: 0.9em;
+      }
+
+      .info-box {
+        padding: 8px;
+      }
+    }
+
+    @media (max-width: 320px) {
+      h1 {
+        font-size: 1.2em;
+      }
+
+      .container input,
+      .container button,
+      .container textarea {
+        font-size: 0.8em;
+      }
+
+      .info-box {
+        padding: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>WhatsApp Link Generator</h1>
+
+  <div class="container">
+    <input type="text" id="phone-number" placeholder="Masukkan nomor WhatsApp (tanpa +)" />
+    <textarea id="message" placeholder="Pesan (opsional)"></textarea>
+    <button id="generate-link">Generate Link</button>
+  </div>
+
+  <div class="info-box">
+    <p id="greeting" class="typing"></p>
+    <p id="ip-address">IP: Detecting...</p>
+    <p id="device-info">Device: Detecting...</p>
+    <p id="battery-info">Battery: Detecting...</p>
+  </div>
+
+  <!-- Popup Modal for Invalid Number -->
+  <div class="popup" id="popup-modal">
+    <div class="popup-content">
+      <h2>Nomor Tidak Valid!</h2>
+      <p>Masukkan nomor WhatsApp yang sesuai dengan format internasional.</p>
+      <button class="popup-button" id="popup-close">Tutup</button>
+    </div>
+  </div>
+
+  <script>
+    // Function to display greeting message based on the time of day
+    function setGreeting() {
+      const hours = new Date().getHours();
+      let greeting = '';
+
+      if (hours >= 5 && hours < 10) greeting = 'Selamat Pagi!';
+      else if (hours >= 10 && hours < 15) greeting = 'Selamat Siang!';
+      else if (hours >= 15 && hours < 18) greeting = 'Selamat Sore!';
+      else if (hours >= 18 && hours < 21) greeting = 'Selamat Malam!';
+      else if (hours >= 21 && hours < 23) greeting = 'Selamat Tengah Malam!';
+      else greeting = 'Selamat Subuh!';
+
+      document.getElementById("greeting").innerText = greeting;
+    }
+
+    setGreeting();
+
+    // Battery Status
+    navigator.getBattery().then(function(battery) {
+      function updateBatteryStatus() {
+        const level = Math.round(battery.level * 100);
+        const charging = battery.charging ? "⚡ Charging" : "Not Charging";
+        document.getElementById("battery-info").innerText = `Battery: ${level}% (${charging})`;
+      }
+
+      updateBatteryStatus();
+      battery.addEventListener("levelchange", updateBatteryStatus);
+      battery.addEventListener("chargingchange", updateBatteryStatus);
+    });
+
+    // Device Info
+    function getDeviceInfo() {
+      const userAgent = navigator.userAgent;
+      let device = "Unknown Device";
+      let model = "Unknown Model";
+
+      // Detect iPhone
+      if (/iPhone|iPad|iPod/i.test(userAgent)) {
+        device = "iPhone";
+        model = userAgent.match(/iPhone OS (\d+_\d+)/) ? "iPhone " + userAgent.match(/iPhone OS (\d+_\d+)/)[0] : "Unknown iPhone Model";
+      }
+
+      // Detect Android
+      else if (/Android/i.test(userAgent)) {
+        device = "Android";
+        model = userAgent.match(/Android\s([0-9\.]+);?\s([a-zA-Z0-9\s\-]+)/) ? userAgent.match(/Android\s([0-9\.]+);?\s([a-zA-Z0-9\s\-]+)/)[2] : "Unknown Android Model";
+      }
+
+      // Display info
+      document.getElementById("device-info").innerText = `Device: ${device} (${model})`;
+    }
+
+    window.onload = function() {
+      getDeviceInfo();
+    }
+
+    // Validate Phone Number Format
+    function validatePhoneNumber(phoneNumber) {
+      const phonePattern = /^[0-9]{10,15}$/; // simple validation for 10-15 digits
+      return phonePattern.test(phoneNumber);
+    }
+
+    // Generate WhatsApp Link
+    document.getElementById("generate-link").addEventListener("click", function () {
+      const phone = document.getElementById("phone-number").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      if (!validatePhoneNumber(phone)) {
+        document.getElementById("popup-modal").style.display = "flex";
+        return;
+      }
+
+      const encodedMessage = encodeURIComponent(message);
+      const waLink = `https://wa.me/${phone}?text=${encodedMessage}`;
+
+      // Show Result in Modal or Copy to Clipboard
+      navigator.clipboard.writeText(waLink).then(() => {
+        alert("Link berhasil dibuat dan disalin ke clipboard:\n" + waLink);
+      }).catch(() => {
+        alert("Link berhasil dibuat:\n" + waLink);
+      });
+    });
+
+    // Close Modal
+    document.getElementById("popup-close").addEventListener("click", function () {
+      document.getElementById("popup-modal").style.display = "none";
+      document.getElementById("phone-number").value = ""; // reset nomor
+    });
+
+    // Fetch IP address (simple external API)
+    fetch("https://api.ipify.org?format=json")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("ip-address").innerText = "IP: " + data.ip;
+      }).catch(() => {
+        document.getElementById("ip-address").innerText = "IP: Gagal dideteksi";
+      });
+  </script>
+
+</body>
+</html>
